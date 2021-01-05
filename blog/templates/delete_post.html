@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block content %}
+{% if user.is_authenticated %}
+<h1> Delete Post </h1>
+<h3>Delete: {{post.title}}</h3>
+<div class="mb-3">
+<form method="POST">
+    {% csrf_token %}
+    <p>Are you sure?</p>
+    <button class="btn btn-secondary">Delete</button>
+</form>
+</div>
+{% else %}
+    <p>You're not authenticated </p>
+{% endif %}
+{% endblock %}
+
+

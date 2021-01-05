@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block content %}
+
+    <h1> hello 2021 </h1>
+    <ul>
+    {% for post in object_list %}
+        <li><a href="{% url 'article' post.pk %}">{{post.title}} </a>
+            <a href="{% url 'category' post.pk %}">{{post.category}} </a>
+            - {{post.author}}
+            - {{post.public_date}}
+
+            {% if user.is_authenticated %}
+            <small><a href="{% url 'update_post' post.pk %}">edit</a></small>
+            <small><a href="{% url 'delete_post' post.pk %}">delete</a></small></li>
+
+            {% endif %}
+
+       <p>{{post.body|slice:":200"|safe}}</p>
+    {% endfor %}
+
+    </ul>
+{% endblock %}
+
+

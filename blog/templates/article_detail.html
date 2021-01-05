@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+{%  block title%} {{post.title_tag}} {% endblock %}
+{% block content %}
+<small><p>current user: {{user.id}}</p></small>
+<small><p>post author: {{post.author.id}}</p></small>
+    <h1>{{ post.title }}</h1>
+    <small> by: {{post.author}} -
+        {{post.public_date}}</small>
+        {% if user.is_authenticated and user.id == post.author.id %}
+       <small> <a href="{% url 'update_post' post.pk %}">edit</a>
+        <a href="{% url 'delete_post' post.pk %}">delete</a></small>
+        {%endif%}
+
+    <hr>
+    {{post.body|safe}}
+
+    <br>
+    <br>
+    <a  class="btn btn-secondary" href="{% url 'home'%}"> back</a>
+<br>
+<hr>
+<h2>Comments:</h2>
+{% if not post.comments.all %}
+    No Comments yet... <a href="#"> Add One</a>
+{% else %}
+    {% for comment in post.comments.all %}
+        <small>
+            {{comment.name}} -
+            {{comment.date_added}}
+        </small>
+            <p>{{comment.body}}</p>
+    {% endfor %}
+
+{% endif %}
+<a href="{% url 'add_comment' post.pk %}">Add Comment</a>
+
+
+
+
+<br>
+
+<hr>
+<br>
+<form action="{% url 'like_post' post.pk %}" method="post">
+    {% csrf_token %}
+     {% if user.is_authenticated %}
+
+        {% if liked %}
+            <button type="submit", name="post_id", value="{{post.id}}", class="btn btn-danger btn-sm">
+                UnLike </button>
+        {% else %}
+             <button type="submit", name="post_id", value="{{post.id}}", class="btn btn-primary  btn-sm">
+                like </button>
+
+        {% endif %}
+    {% endif %}
+    - {{total_likes}} Likes
+</form>
+
+{% endblock %}
